@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head lang="en">
+		<meta charset="UTF-8">
+		<title>学生宿舍管理系统</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<meta name="format-detection" content="telephone=no">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="alternate icon" type="image/png" href="/static/img/favicon.png">
+		<link rel="stylesheet" href="/static/css/amazeui.min.css" />
+		<style type="text/css">
+			#container,
+			#yichang,
+			#visitor {
+				width: 100%;
+				height: 400px;
+				margin-top: 1rem;
+			}
+			#leave{
+				margin-bottom: 0;
+			}
+			
+			
+			@media only screen and (max-width: 500px) {
+				#container {
+					position: relative;
+					left: -4px;
+					height: 280px;
+				}
+				#yichang {
+					position: relative;
+					left: -2px;
+					height: 280px;
+				}
+				#visitor {
+					height: 260px;
+				}
+			}
+			
+			#touxiang {
+				margin-right: 6px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="am-topbar am-topbar-fixed-top">
+			<div class="am-container">
+				<!--<img class="am-topbar-left" src="assets/i/favicon.png"/>-->
+				<p class="am-topbar-brand am-text-lg"><img id="touxiang" class="" src="/static/img/girl-6.png" style="width: 32px;height: 32px;" />
+					<a href="#">概览信息</a>
+				</p><button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-secondary am-show-sm-only" data-am-collapse="{target: '#collapse-head'}"><span class="am-sr-only">导航切换</span><span class="am-icon-bars"></span></button>
+				<div class="am-collapse am-topbar-collapse" id="collapse-head">
+					<ul class="am-nav am-nav-pills am-topbar-nav">
+						<li>
+							<a href="/mobile/teacher">概览信息</a>
+						</li>
+						<li>
+							<a href="/leave/check">请假审批</a>
+						</li>
+						<li>
+							<a href="/mobile/queryAttend">考勤记录查询</a>
+						</li>
+						<li>
+							<a href="/mobile/queryAttend">学生信息查询</a>
+						</li>
+						<li>
+							<a href="/mobile/myInfo">我的资料</a>
+						</li>
+						<li>
+							<a href="/mobile/changePwd">修改密码</a>
+						</li>
+						<li>
+							<a href="/mobile/about">关于</a>
+						</li>
+					</ul>
+					<div class="am-topbar-right">
+						<button id="logout" class="am-btn am-btn-secondary am-topbar-btn am-btn-sm" onclick="quit()">
+							<span class="am-icon-arrow-circle-right"></span>&nbsp;退出登录
+						</button>
+					</div>
+				</div>
+			</div>
+		</header>
+		<div class="wrapper">
+			<div id="yichang"></div>		
+			<div class="am-panel am-panel-default" id="leave">
+				<header class="am-panel-hd am-text-center am-text-lg">待审批假条</header>
+				<table id="leaTab" class="am-table am-table-centered">
+					<thead>
+						<tr>
+							<th>姓名</th>
+							<th>申请时间</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody id="leaTabBody">
+						<tr th:each="leaveResult:${leaves}">
+							<td th:text="${leaveResult.applyName}"></td>
+							<td th:text="${leaveResult.createTime}"></td>
+							<td>
+								<form class="myForm" action="/mobile/leaveDetail" method="post">
+									<input type="hidden" name="leaid" th:value="${leaveResult.leaid}">
+									<a class="look">审批</a>
+								</form>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			
+		</div>
+		<script src="/static/js/jquery.min.js"></script>
+		<script src="/static/js/amazeui.min.js"></script>
+		<script src="/static/js/highcharts.js"></script>
+		<!--<script type="text/javascript" src="js/exporting.js"></script>-->
+		<script type="text/javascript" src="/static/js/highcharts-zh_CN.js"></script>
+		<script type="text/javascript" src="/static/js/m_teacher.js"></script>
+		<script type="text/javascript">
+		function quit(){
+			if(confirm("是否退出登录？")){
+				window.location.href="/login";
+			}	
+		}
+		
+		$("body").on("click",".look",function(){
+			$(this).parent(".myForm").submit();
+		});
+		</script>
+	</body>
+
+</html>

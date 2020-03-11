@@ -1,0 +1,71 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+<meta charset="UTF-8">
+<title>学生宿舍管理系统</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no">
+<meta name="renderer" content="webkit">
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<!--<link rel="alternate icon" type="image/png" href="assets/i/favicon.png">-->
+<link rel="stylesheet" href="/static/css/amazeui.min.css" />
+<style>
+.header {
+	text-align: center;
+}
+
+.header h1 {
+	font-size: 150%;
+	color: #333;
+	margin-top: 30px;
+}
+
+.header p {
+	font-size: 14px;
+}
+</style>
+</head>
+
+<body>
+	<div class="header">
+		<div class="am-g">
+			<h1>学生宿舍管理系统</h1>
+			<p>Student Dormitory Management System</p>
+		</div>
+		<hr />
+	</div>
+	<div class="am-g">
+		<div class="am-u-lg-6 am-u-md-8 am-u-sm-centered">
+			<form method="post" class="am-form" action="toLogin">
+				<div class="alert alert-danger" role="alert" th:if="${msg}!=null" th:text="${msg}"></div>
+				<label for="email">账号:</label> <input type="text" name="username"
+					id="email" value="" /> <label for="password">密码:</label> <input
+					type="password" name="password" id="password" value="" /> <label
+					for="identy">身份:</label> <select data-am-selected id="identy"
+					name="cat">
+					<option value="student">学生</option>
+					<option value="teacher">教职工</option>
+					<option value="admin">管理员</option>
+					<option value="other">其他登录方式</option>
+				</select> <label for="remember-me"> <input type="checkbox" name=""
+					id="remember-me" />记住密码
+				</label> <br />
+				<div class="am-cf">
+					<button type="submit" id="login"
+						class="am-btn am-btn-primary am-btn-sm am-fl">登 录</button>
+					<button type="button" class="am-btn am-btn-default am-btn-sm am-fr">忘记密码？</button>
+				</div>
+			</form>
+			<hr>
+			<p>© 2019 AllMobilize, Inc. Licensed under MIT license.</p>
+		</div>
+	</div>
+
+	<script type="text/javascript" src="/static/js/jquery.min.js"></script>
+
+</body>
+
+</html>

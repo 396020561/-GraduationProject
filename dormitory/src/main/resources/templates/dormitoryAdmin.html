@@ -1,0 +1,125 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<link rel="stylesheet" href="/static/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/static/css/font-awesome.min.css" />
+<link rel="stylesheet" href="/static/css/skins/_all-skins.css" />
+</head>
+<body>
+	<div class="container">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				楼栋管理员
+				<a href="/dormitoryAdmin/info?page=1">宿舍管理员信息</a>
+			</div>
+			<div class="panel-body">
+				<table class="table table-hover">
+					<thead>
+						<tr class="info">
+							<th>楼栋</th>
+							<th>人员</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody style="height: 100%">
+						<tr th:each="result:${results}" class="warning">
+							<td th:text="${result.buildingName}"></td>
+							<td th:text="${result.adminName}+'('+${result.adminid}+')'"></td>
+							<td>
+								<button  class="btn btn-info" th:if="${result.add==true}" id="add" data-toggle="modal" data-target="#myModal3">新增</button>
+								<button  class="btn btn-info" th:if="${result.add==false}" disabled="disabled" id="add" data-toggle="modal" data-target="#myModal3">新增</button>
+								<button  class="btn btn-warning" th:if="${result.del==true}" id="del" data-toggle="modal" data-target="#myModal4">删除</button>
+								<button  class="btn btn-warning" th:if="${result.del==false}" disabled="disabled" id="del" data-toggle="modal" data-target="#myModal4">删除</button>
+							</td>
+						</tr>
+					</tbody>
+						
+				</table>
+			</div>
+			<div class="panel-footer">
+			<a id="pre1" style=" font-size: 14px; float: left;text-decoration:none;color:#5B5B5B"  th:if="${page}==1">&lt;上一页</a> 
+				<a id="pre1" style="cursor: pointer; font-size: 14px; float: left" onclick="pre1()" th:if="${page}!=1">&lt;上一页</a> 
+				<span style="font-size: 14px; position: relative; left: 35%" th:text="'('+${page}+'/'+${pageTotal}+')'"></span>
+				<span style="font-size: 14px; position: relative; left: 35%">&nbsp;<a style="cursor: pointer; font-size: 14px" id="jump1" onclick="jump1()">跳转</a> 至 <input type="text" size="1" id="num1" />页</span>
+				<a id="next1" style="font-size: 14px; float: right;text-decoration:none;color:#5B5B5B" th:if="${pageTotal}==${page}">下一页 &gt;</a>
+				<a id="next1" style="cursor: pointer; font-size: 14px; float: right" onclick="next1()" th:if="${pageTotal}>${page}">下一页 &gt;</a>
+				<div style="clear: both"></div> 
+			</div>
+			<div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			    <div class="modal-dialog">
+			        <div class="modal-content">
+			        <form action="/userDormitory/add" method="post" id="studentForm">
+			            <div class="modal-header">
+			                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			                <h4 class="modal-title" id="myModalLabel">添加楼栋管理员</h4>
+			            </div>
+			            <div class="modal-body">
+		            	<div class="form-group container" >
+							<label for="lastname" class="col-sm-1 control-label text-center" style="position:relative;top:8px">学号</label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control" name="uid" 
+									placeholder="请输入员工编号" id="uid" style="" required="required" autocomplete="off"/>
+							</div>
+						</div>
+						<input  name="buildingName" th:value="${buildingName}" style="display:none"  />
+			            </div>
+			            <div class="modal-footer">
+			                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+			                <button type="submit" class="btn btn-primary">提交</button>
+			            </div>
+		            </form>
+			        </div><!-- /.modal-content -->
+			    </div><!-- /.modal -->
+			</div>
+		</div>
+	</div>
+</body>
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script type="text/javascript" th:inline="javascript">
+   function pre1(){
+			var pageNum=[[${page}]]-1;
+			$("#pre1").attr("href","/manager/dormitoryAdmin?page="+pageNum);	
+	};
+	function next1(){
+			var pageNum=[[${page}]]+1;
+			$("#next1").attr("href","/manager/dormitoryAdmin?page="+pageNum);	
+	};
+	var numPattern = /^[0-9]*$/; 
+	function jump1(){
+		var c=$("#num1").val();
+		if(c!=""){
+			if(numPattern.test(c)){
+				if(c<= [[${pageTotal}]] ){
+					var pageNum=c;
+					$("#jump1").attr("href","/manager/dormitoryAdmin?page="+pageNum);	
+				}else{
+					alert("输入页码大于总页数，请重新输入");
+					$("#num1").val("");
+				}
+			}else{
+				alert("输入格式不正确，请重新输入");
+				$("#num1").val("");
+			}
+		}else{
+			alert("输入为空，不可跳转！请输入有效数字");
+		}
+	};
+	$(function(){
+		$('#[[${buildingid}]]').attr('selected','selected');
+		$('body').on('click','#add',function(){
+			var tr = $(this).parents("tr");
+			var buildingName=tr.children('td:eq(0)').text();
+			document.getElementById('studentForm').action = "/dormitoryAdmin/add/"+buildingName;
+		});
+		$('body').on('click','#del',function(){
+			var tr = $(this).parents("tr");
+			var buildingName=tr.children('td:eq(0)').text();
+			window.location.href= "/dormitoryAdmin/del/"+buildingName;
+		});
+	});
+	
+    </script>
+
+</html>

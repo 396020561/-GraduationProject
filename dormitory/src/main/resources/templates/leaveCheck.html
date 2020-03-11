@@ -1,0 +1,121 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<link rel="stylesheet" href="/static/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/static/css/font-awesome.min.css" />
+<link rel="stylesheet" href="/static/css/skins/_all-skins.css" />
+</head>
+<body>
+	<div class="container">
+		<div class="panel panel-default">
+			<div class="panel-heading">请假记录</div>
+			<div class="panel-body">
+				<table class="table table-hover">
+					<thead>
+						<tr class="info">
+							<th>申请学生</th>
+							<th>处理老师</th>
+							<th>起始日期</th>
+							<th>结束日期</th>
+							<th>审批状态</th>
+							<th>请假原因</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody style="height: 100%">
+						<tr th:each="leaveResult:${leaves}" class="warning">
+							<td th:text="${leaveResult.applyName}"></td>
+							<td th:text="${leaveResult.treatName}"></td>
+							<td th:text="${leaveResult.beginTime}"></td>
+							<td th:text="${leaveResult.endTime}"></td>
+							<td th:if="${leaveResult.status}==0" th:text="待审批"></td>
+							<td th:if="${leaveResult.status}==1" th:text="通过"></td>
+							<td th:if="${leaveResult.status}==2" th:text="不通过"></td>
+							<td th:text="${leaveResult.reason}"></td>
+							<td th:id="${leaveResult.leaid}">
+							<input th:if="${leaveResult.status}==0" class="btn btn-success btn-xs" id="success" value="通过" size="2" />
+							<input th:if="${leaveResult.status}==0" class="btn btn-danger btn-xs" id="fail" value="不通过" size="2" /></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="panel-footer">
+				<a id="pre1"
+					style="font-size: 14px; float: left; text-decoration: none; color: #5B5B5B"
+					th:if="${page}==1">&lt;上一页</a> <a id="pre1"
+					style="cursor: pointer; font-size: 14px; float: left"
+					onclick="pre1()" th:if="${page}!=1">&lt;上一页</a> <span
+					style="font-size: 14px; position: relative; left: 35%"
+					th:text="'('+${page}+'/'+${pageTotal}+')'"></span> <span
+					style="font-size: 14px; position: relative; left: 35%">&nbsp;<a
+					style="cursor: pointer; font-size: 14px" id="jump1"
+					onclick="jump1()">跳转</a> 至 <input type="text" size="1" id="num1" />页
+				</span> <a id="next1"
+					style="font-size: 14px; float: right; text-decoration: none; color: #5B5B5B"
+					th:if="${pageTotal}==${page}">下一页 &gt;</a> <a id="next1"
+					style="cursor: pointer; font-size: 14px; float: right"
+					onclick="next1()" th:if="${pageTotal}>${page}">下一页 &gt;</a>
+				<div style="clear: both"></div>
+			</div>
+		</div>
+	</div>
+
+</body>
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script type="text/javascript" th:inline="javascript">
+	   function pre1(){
+			var pageNum=[[${page}]]-1;
+			$("#pre1").attr("href","/leave/check?page="+pageNum);	
+	};
+	function next1(){
+			var pageNum=[[${page}]]+1;
+			$("#next1").attr("href","/leave/check?page="+pageNum);	
+	};
+	var numPattern = /^[0-9]*$/; 
+	function jump1(){
+		var c=$("#num1").val();
+		if(c!=""){
+			if(numPattern.test(c)){
+				if(c<= [[${pageTotal}]] &&c>0){
+					var pageNum=c;
+					$("#jump1").attr("href","/leave/check?page="+pageNum);	
+				}else{
+					alert("输入页码大于总页数或等于0，请重新输入");
+					$("#num1").val("");
+				}
+			}else{
+				alert("输入格式不正确，请重新输入");
+				$("#num1").val("");
+			}
+		}else{
+			alert("输入为空，不可跳转！请输入有效数字");
+		}
+	};
+	$(function(){
+		$('body').on('click', '#success', function() {
+			var leaid = $(this).parent().attr('id');
+			 $.post("/leave/check/success",{"leaid":leaid},function(result){
+				if (result.status) {
+					window.location.reload();
+				} else {
+					alert(result.msg);
+				}
+			});
+
+		});
+		$('body').on('click', '#fail', function() {
+			var leaid = $(this).parent().attr('id');
+			 $.post("/leave/check/fail",{"leaid":leaid},function(result){
+				if (result.status) {
+					window.location.reload();
+				} else {
+					alert(result.msg);
+				}
+			});
+
+		});
+	});
+    </script>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+
+	<head lang="en">
+		<meta charset="UTF-8">
+		<title>学生宿舍管理系统</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<meta name="format-detection" content="telephone=no">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="alternate icon" type="image/png" href="/static/img/favicon.png">
+		<link rel="stylesheet" href="/static/css/amazeui.min.css" />
+		<style type="text/css">
+			#container,
+			#yichang,
+			#visitor {
+				width: 100%;
+				height: 400px;
+				margin-top: 1rem;
+			}
+			#leave{
+				margin-bottom: 0;
+			}
+			
+			
+			@media only screen and (max-width: 500px) {
+				#container {
+					position: relative;
+					left: -4px;
+					height: 280px;
+				}
+				#yichang {
+					position: relative;
+					left: -2px;
+					height: 280px;
+				}
+				#visitor {
+					height: 260px;
+				}
+			}
+			
+			#touxiang {
+				margin-right: 6px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="am-topbar am-topbar-fixed-top">
+			<div class="am-container">
+				<!--<img class="am-topbar-left" src="assets/i/favicon.png"/>-->
+				<p class="am-topbar-brand am-text-lg"><img id="touxiang" class="" src="/static/img/boy.png" style="width: 32px;height: 32px;" />
+					<a href="#">住宿管理</a>
+				</p><button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-secondary am-show-sm-only" data-am-collapse="{target: '#collapse-head'}"><span class="am-sr-only">导航切换</span><span class="am-icon-bars"></span></button>
+				<div class="am-collapse am-topbar-collapse" id="collapse-head">
+					<ul class="am-nav am-nav-pills am-topbar-nav">
+						<li>
+							<a href="/">概览信息</a>
+						</li>
+						<li class="am-dropdown" data-am-dropdown>
+							<a class="am-dropdown-toggle" data-am-dropdown-toggle href="javascript:;">
+								请假管理<span class="am-icon-caret-down"></span>
+							</a>
+							<ul class="am-dropdown-content">
+								<li>
+									<a href="/leave">请假记录</a>
+								</li>
+								<li>
+									<a href="/mobile/leaveAdd">申请假条</a>
+								</li>
+							</ul>
+						</li>
+						<li class="am-dropdown" data-am-dropdown>
+							<a class="am-dropdown-toggle" data-am-dropdown-toggle href="javascript:;">
+								访客管理 <span class="am-icon-caret-down"></span>
+							</a>
+							<ul class="am-dropdown-content">
+								<!--<li class="am-dropdown-header">标题</li>-->
+								<li>
+									<a href="/visitor">访客列表</a>
+								</li>
+								<!-- <li>
+									<a href="/mobile/visitorInside">校内访客录入</a>
+								</li> -->
+								<li>
+									<a href="/mobile/visitorOutside">访客录入</a>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<a href="/mobile/query">记录查询</a>
+						</li>
+						<li>
+							<a href="/mobile/dormManage">住宿管理</a>
+						</li>
+						<li>
+							<a href="/mobile/myInfo">我的资料</a>
+						</li>
+						<li>
+							<a href="/mobile/changePwd">修改密码</a>
+						</li>
+						<li>
+							<a href="/mobile/about">关于</a>
+						</li>
+					</ul>
+					<div class="am-topbar-right"><button class="am-btn am-btn-secondary am-topbar-btn am-btn-sm"><span class="am-icon-arrow-circle-right"></span>退出登录</button></div>
+				</div>
+			</div>
+		</header>
+		<div class="wrapper">
+			<table class="am-table">
+				<thead>
+					<tr>
+						<th>住宿信息</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>姓名：</td>
+						<td>王旭平</td>
+					</tr>
+					<tr>
+						<td>学号：</td>
+						<td>15046221</td>
+					</tr>
+					<tr>
+						<td>寝室：</td>
+						<td>19栋511</td>
+					</tr>
+					<tr>
+						<td>入住时间：</td>
+						<td>2015-09-01</td>
+					</tr>
+					<tr>
+						<td>申请操作：</td>
+						<td>
+							<input type="button" class="am-btn am-btn-sm am-btn-primary am-radius" id="" value="申请调宿" />
+							<input type="button" class="am-btn am-btn-sm am-btn-danger am-radius" id="" value="申请退宿" />
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			
+			<!--<div class="am-panel am-panel-default" id="leave">
+				<table id="leaTab" class="am-table am-table-striped am-table-centered">
+					<thead>
+						<tr>
+							<th>姓名</th>
+							<th>宿舍</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody id="leaTabBody">
+						<tr>
+							<td>王旭平</td>
+							<td>19#511</td>
+							<td>
+								<input type="button" class="am-btn am-btn-sm am-btn-primary am-radius" id="" value="调宿" />
+								<input type="button" class="am-btn am-btn-sm am-btn-warning am-radius" id="" value="退宿" />
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>-->
+			
+		</div>
+		<script src="/static/js/jquery.min.js"></script>
+		<script src="/static/js/amazeui.min.js"></script>
+		<script type="text/javascript">
+			
+		</script>
+	</body>
+
+</html>

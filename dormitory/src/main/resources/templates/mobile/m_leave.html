@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+
+	<head lang="en">
+		<meta charset="UTF-8">
+		<title>学生宿舍管理系统</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<meta name="format-detection" content="telephone=no">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="alternate icon" type="image/png" href="/static/img/favicon.png">
+		<link rel="stylesheet" href="/static/css/amazeui.min.css" />
+		<style type="text/css">
+			#touxiang {
+				margin-right: 6px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="am-topbar am-topbar-fixed-top">
+			<div class="am-container">
+				<!--<img class="am-topbar-left" src="assets/i/favicon.png"/>-->
+				<p class="am-topbar-brand am-text-lg">
+					<img id="touxiang" class="" src="/static/img/boy.png" style="width: 32px;height: 32px;"/>
+					<a href="#">请假申请</a>
+				</p>
+
+				<button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-secondary am-show-sm-only" data-am-collapse="{target: '#collapse-head'}">
+					<span class="am-sr-only">导航切换</span>
+					<span class="am-icon-bars"></span>
+				</button>
+				<div class="am-collapse am-topbar-collapse" id="collapse-head">
+					<ul class="am-nav am-nav-pills am-topbar-nav">
+						<li>
+							<a href="/">概览信息</a>
+						</li>
+						<li class="am-dropdown" data-am-dropdown>
+							<a class="am-dropdown-toggle" data-am-dropdown-toggle href="javascript:;">
+								请假管理<span class="am-icon-caret-down"></span>
+							</a>
+							<ul class="am-dropdown-content">
+								<li>
+									<a href="/leave">请假记录</a>
+								</li>
+								<li>
+									<a href="/mobile/leaveAdd">申请假条</a>
+								</li>
+							</ul>
+						</li>
+						<li class="am-dropdown" data-am-dropdown>
+							<a class="am-dropdown-toggle" data-am-dropdown-toggle href="javascript:;">
+								访客管理 <span class="am-icon-caret-down"></span>
+							</a>
+							<ul class="am-dropdown-content">
+								<!--<li class="am-dropdown-header">标题</li>-->
+								<li>
+									<a href="/visitor">访客列表</a>
+								</li>
+								<!-- <li>
+									<a href="/mobile/visitorInside">校内访客录入</a>
+								</li> -->
+								<li>
+									<a href="/mobile/visitorOutside">访客录入</a>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<a href="/mobile/query">记录查询</a>
+						</li>
+						<li>
+							<a href="/mobile/dormManage">住宿管理</a>
+						</li>
+						<li>
+							<a href="/mobile/myInfo">我的资料</a>
+						</li>
+						<li>
+							<a href="/mobile/changePwd">修改密码</a>
+						</li>
+						<li>
+							<a href="/mobile/about">关于</a>
+						</li>
+					</ul>
+					<div class="am-topbar-right">
+						<button class="am-btn am-btn-secondary am-topbar-btn am-btn-sm"><span class="am-icon-arrow-circle-right"></span> 退出登录</button>
+					</div>
+				</div>
+			</div>
+		</header>
+		<div class="am-container" style="margin-top: 20px;">
+			<form class="am-form">
+				<div class="begin-time am-g">
+					<div class="am-text-left am-u-sm-3 am-u-md-2" style="padding: 0;">
+						开始时间:
+					</div>
+					<div class="am-form-group am-form-icon am-u-sm-9 am-u-md-10 " style="padding: 0;">
+						<i class="am-icon-calendar"></i>
+						<input type="datetime-local" id="beginTime" class="am-form-field am-input-sm am-radius" placeholder="时间">
+					</div>
+				</div>
+				<div class="end-time am-g">
+					<div class="am-text-left am-u-sm-3 am-u-md-2" style="padding: 0;">
+						结束时间:
+					</div>
+					<div class="am-form-group am-form-icon am-u-sm-9 am-u-md-10 " style="padding: 0;">
+						<i class="am-icon-calendar"></i>
+						<input type="datetime-local" id="endTime" class="am-form-field am-input-sm am-radius" placeholder="时间">
+					</div>
+				</div>
+				<div class="am-g">
+					<div class="am-text-left am-u-sm-3 am-u-md-2" style="padding: 0;">
+						详细说明:
+					</div>
+					<div class="am-u-sm-9 am-u-md-10" style="padding: 0;">
+						<textarea rows="6" style="width: 100%;" id="editor" class="am-radius"></textarea>
+					</div>
+				</div>
+				<div class="am-align-right am-margin-top">
+					<button id="addLeave" class="am-btn am-btn-secondary am-btn-sm am-radius">提交</button>
+				</div>
+			</form>
+			
+		</div>
+		<script type="text/javascript" src="/static/js/jquery.min.js"></script>
+		<script src="/static/js/amazeui.min.js"></script>
+		<script type="text/javascript">
+		$("#addLeave").on('click',function(){
+			
+			var beginTime=$("#beginTime").val().replace('T',' ');
+			var endTime=$("#endTime").val().replace('T',' ');
+			var reason=$("#editor").val();
+			
+			console.log(beginTime);
+			console.log(endTime);
+			console.log(reason);
+			
+			$.ajax({
+				url:"/leave/addLeave",
+				data:{"beginTime":beginTime,"endTime":endTime,"reason":reason},
+				type:'post',
+				success:function(data){
+					alert(data.msg);
+				},
+				error:function(data){
+					alert(data.msg);
+				}
+			});
+		});
+		</script>
+	</body>
+
+</html>

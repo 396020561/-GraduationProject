@@ -1,0 +1,289 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<link rel="stylesheet" href="/static/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/static/css/font-awesome.min.css" />
+<link rel="stylesheet" href="/static/css/skins/_all-skins.css" />
+</head>
+<body>
+	<div class="container">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<div class="row">
+					<span class="col-md-2">
+						<select class="form-control" id="select">
+						  <option th:each="building:${session.buildings}" th:value="${building.buildingid}" th:text="${building.name}" th:id="${building.buildingid}"></option>
+						</select>
+					</span>
+					<span class="col-md-3 col-md-offset-5" >
+						<div class="input-group">
+							<input type="text" class="form-control" id="searchId" placeholder="搜 索 宿舍号..." name="uid">
+	      					<span class="input-group-btn"><button type="button" class="btn" id="search"><i class="glyphicon glyphicon-search"></i></button></span>
+						</div>
+					</span>
+					<span class="col-md-2">
+						<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal1">新增楼栋</button>
+						<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+						    <div class="modal-dialog">
+						        <div class="modal-content">
+						        <form action="/building/add" method="post" id="myForm" >
+						            <div class="modal-header">
+						                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						                <h4 class="modal-title" id="myModalLabel">添加楼栋</h4>
+						            </div>
+						            <div class="modal-body">	
+						            	<div class="form-group container" >
+											<label for="lastname" class="col-sm-1 control-label text-center" style="position:relative;top:8px">楼栋名</label>
+											<div class="col-sm-4">
+												<input type="text" class="form-control" name="name" autocomplete="off"
+													placeholder="请以“1-2栋”形式输入" id="name" style="" required="required"/>
+											</div>
+										</div>
+						            </div>
+						            <div class="modal-footer">
+						                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+						                <button type="submit" class="btn btn-primary">提交</button>
+						            </div>
+					            </form>
+						        </div><!-- /.modal-content -->
+						    </div><!-- /.modal -->
+						</div>
+						
+					</span>
+				</div>
+			</div>
+			<div class="panel-body">
+				<table class="table table-hover">
+					<caption th:text="${buildingName}" class="text-center"></caption>
+					<thead>
+						<tr class="info">
+							<th>宿舍号</th>
+							<th>学生</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody style="height: 100%">
+						<tr th:each="result:${results}" class="warning">
+							<td th:text="${result.dormitoryNum}"></td>
+							<td>
+								<span th:each="user:${result.userDormitories}" class="col-md-3" th:text="${user.name}+'('+${user.uid}+')'"></span>
+							</td>
+							<td>
+								<button  class="btn btn-info" th:if="${result.add==true}" id="add" data-toggle="modal" data-target="#myModal3">新增</button>
+								<button  class="btn btn-info" th:if="${result.add==false}" disabled="disabled" id="add" data-toggle="modal" data-target="#myModal3">新增</button>
+								<button  class="btn btn-warning" th:if="${result.del==true}" id="del" data-toggle="modal" data-target="#myModal4">删除</button>
+								<button  class="btn btn-warning" th:if="${result.del==false}" disabled="disabled" id="del" data-toggle="modal" data-target="#myModal4">删除</button>
+								<button  class="btn btn-danger" th:if="${result.exc==true}" id="exc" data-toggle="modal" data-target="#myModal5">交换</button>
+								<button  class="btn btn-danger" th:if="${result.exc==false}" disabled="disabled" id="exc" data-toggle="modal" data-target="#myModal5">交换</button>
+							</td>
+						</tr>
+						<tr>
+						<td></td><td></td>
+						<td><button type="button" class="btn btn-info btn-sm pull-right" data-toggle="modal" data-target="#myModal">新增宿舍</button>
+						<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+							    <div class="modal-dialog">
+							        <div class="modal-content">
+							        <form action="/dormitory/add" method="post" id="myForm">
+							            <div class="modal-header">
+							                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+							                <h4 class="modal-title" id="myModalLabel">添加宿舍</h4>
+							            </div>
+							            <div class="modal-body">
+						            	<div class="form-group container" >
+											<label for="lastname" class="col-sm-1 control-label text-center" style="position:relative;top:8px">宿舍名</label>
+											<div class="col-sm-4">
+												<input type="text" class="form-control" name="dormitoryNum" 
+													placeholder="请以“19-511”形式输入" id="dormitoryNum" style="" required="required"/>
+											</div>
+										</div>
+										<input  name="buildingName" th:value="${buildingName}" style="display:none"  />
+							            </div>
+							            <div class="modal-footer">
+							                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+							                <button type="submit" class="btn btn-primary">提交</button>
+							            </div>
+						            </form>
+							        </div><!-- /.modal-content -->
+							    </div><!-- /.modal -->
+							</div>
+						
+						</td></tr>
+					</tbody>
+						
+				</table>
+			</div>
+			<div class="panel-footer">
+			<a id="pre1" style=" font-size: 14px; float: left;text-decoration:none;color:#5B5B5B"  th:if="${page}==1">&lt;上一页</a> 
+				<a id="pre1" style="cursor: pointer; font-size: 14px; float: left" onclick="pre1()" th:if="${page}!=1">&lt;上一页</a> 
+				<span style="font-size: 14px; position: relative; left: 35%" th:text="'('+${page}+'/'+${pageTotal}+')'"></span>
+				<span style="font-size: 14px; position: relative; left: 35%">&nbsp;<a style="cursor: pointer; font-size: 14px" id="jump1" onclick="jump1()">跳转</a> 至 <input type="text" size="1" id="num1" />页</span>
+				<a id="next1" style="font-size: 14px; float: right;text-decoration:none;color:#5B5B5B" th:if="${pageTotal}==${page}">下一页 &gt;</a>
+				<a id="next1" style="cursor: pointer; font-size: 14px; float: right" onclick="next1()" th:if="${pageTotal}>${page}">下一页 &gt;</a>
+				<div style="clear: both"></div> 
+			</div>
+			<div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			    <div class="modal-dialog">
+			        <div class="modal-content">
+			        <form action="/userDormitory/add" method="post" id="studentForm">
+			            <div class="modal-header">
+			                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			                <h4 class="modal-title" id="myModalLabel">添加学生</h4>
+			            </div>
+			            <div class="modal-body">
+		            	<div class="form-group container" >
+							<label for="lastname" class="col-sm-1 control-label text-center" style="position:relative;top:8px">学号</label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control" name="uid" 
+									placeholder="请输入学号" id="uid" style="" required="required"/>
+							</div>
+						</div>
+						<input  name="buildingName" th:value="${buildingName}" style="display:none"  />
+			            </div>
+			            <div class="modal-footer">
+			                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+			                <button type="submit" class="btn btn-primary">提交</button>
+			            </div>
+		            </form>
+			        </div><!-- /.modal-content -->
+			    </div><!-- /.modal -->
+			</div>
+			<div class="modal fade" id="myModal4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			    <div class="modal-dialog">
+			        <div class="modal-content">
+			        <form action="/userDormitory/remove" method="post" id="removeForm">
+			            <div class="modal-header">
+			                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			                <h4 class="modal-title" id="myModalLabel">移出宿舍</h4>
+			            </div>
+			            <div class="modal-body">
+		            	<div class="form-group container" >
+							<label for="lastname" class="col-sm-1 control-label text-center" style="position:relative;top:8px">学号</label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control" name="uid" 
+									placeholder="请输入学号" id="uid" style="" required="required"/>
+							</div>
+						</div>
+						<input  name="buildingName" th:value="${buildingName}" style="display:none"  />
+			            </div>
+			            <div class="modal-footer">
+			                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+			                <button type="submit" class="btn btn-primary">提交</button>
+			            </div>
+		            </form>
+			        </div><!-- /.modal-content -->
+			    </div><!-- /.modal -->
+			</div>
+						<div class="modal fade" id="myModal5" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			    <div class="modal-dialog">
+			        <div class="modal-content">
+			        <form action="/userDormitory/exc" method="post" id="exchangeForm">
+			            <div class="modal-header">
+			                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			                <h4 class="modal-title" id="myModalLabel">交换宿舍宿舍</h4>
+			            </div>
+			            <div class="modal-body">
+		            	<div class="form-group container" >
+							<label for="lastname" class="col-sm-1 control-label text-center" style="position:relative;top:8px">学号1</label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control" name="uid1" 
+									placeholder="请以输入学号" id="uid1" style="" required="required"/>
+							</div>
+						</div>
+						<div class="form-group container" >
+							<label for="lastname" class="col-sm-1 control-label text-center" style="position:relative;top:8px">学号2</label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control" name="uid2" 
+									placeholder="请以输入学号" id="uid2" style="" required="required"/>
+							</div>
+						</div>
+						<input  name="buildingName" th:value="${buildingName}" style="display:none"  />
+			            </div>
+			            <div class="modal-footer">
+			                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+			                <button type="submit" class="btn btn-primary">提交</button>
+			            </div>
+		            </form>
+			        </div><!-- /.modal-content -->
+			    </div><!-- /.modal -->
+			</div>
+		</div>
+	</div>
+</body>
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script type="text/javascript" th:inline="javascript">
+function fun(e) {
+	$.post("leave/cancel", {
+		"leaid" : e
+	}, function(result) {
+		if (result.status) {
+			window.location.reload();
+		} else {
+			alert(result.msg);
+		}
+	});
+}
+	   function pre1(){
+			var pageNum=[[${page}]]-1;
+			var buildingid=[[${buildingid}]];
+			$("#pre1").attr("href","manager/dormitory?buildingid="+buildingid+"&page="+pageNum);	
+	};
+	function next1(){
+			var pageNum=[[${page}]]+1;
+			var buildingid=[[${buildingid}]];
+			$("#next1").attr("href","manager/dormitory?buildingid="+buildingid+"&page="+pageNum);	
+	};
+	var numPattern = /^[0-9]*$/; 
+	function jump1(){
+		var c=$("#num1").val();
+		if(c!=""){
+			if(numPattern.test(c)){
+				if(c<= [[${pageTotal}]] ){
+					var pageNum=c;
+					var buildingid=[[${buildingid}]];
+					$("#jump1").attr("href","manager/dormitory?buildingid="+buildingid+"&page="+pageNum);	
+				}else{
+					alert("输入页码大于总页数，请重新输入");
+					$("#num1").val("");
+				}
+			}else{
+				alert("输入格式不正确，请重新输入");
+				$("#num1").val("");
+			}
+		}else{
+			alert("输入为空，不可跳转！请输入有效数字");
+		}
+	};
+	$(function(){
+		$('#[[${buildingid}]]').attr('selected','selected');
+		$('body').on('click','#add',function(){
+			var tr = $(this).parents("tr");
+			var dormitoryNum=tr.children('td:eq(0)').text();
+			document.getElementById('studentForm').action = "/userDormitory/add/"+dormitoryNum;
+		});
+		$('body').on('click','#del',function(){
+			var tr = $(this).parents("tr");
+			var dormitoryNum=tr.children('td:eq(0)').text();
+			document.getElementById('removeForm').action = "/userDormitory/del/"+dormitoryNum;
+		});
+		$('#select').on('change',function(){
+			  if($(this).val()){
+			       var buildingid=$(this).val();
+			       window.location.href="/manager/dormitory?buildingid="+buildingid+"&page=1";
+			    }else{
+					alert("操作不规范");
+			    }
+		});
+		$('#search').on('click',function(){
+			var dormitoryNum = $('#searchId').val();
+			if(dormitoryNum==null||dormitoryNum=="")
+				alert("搜索框不能为空");
+			else
+				window.location.href="/userDormitory/search/"+dormitoryNum;
+		});
+	});
+	
+    </script>
+
+</html>

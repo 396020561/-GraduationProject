@@ -1,0 +1,42 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<body>
+	<div>
+		<form action="toLogin" method="post">
+			<input type="text" name="username" id="username" />
+			<input type="password" name="password" id="password" /> 
+			<select name="cat"
+				autofocus="autofocus" id="cat">
+				<option value="student">学生用户</option>
+				<option value="teacher">教职工用户</option>
+				<option value="admin">管理员用户</option>
+				<option value="other">本地用户</option>
+			</select>
+			<button type="submit">登录</button>
+		</form>
+		<div th:if="${msg}">
+			<p th:text="${msg}"/>
+		</div>
+	</div>
+</body>
+
+<script src="/static/js/jquery.min.js"></script>
+
+<script>
+	function toLogin() {
+		var user = $('#username').val();
+		var password = $('#password').val();
+		var cat = $('#cat').val();
+		console.log(cat);
+		$.post("toLogin", {
+			"username" : user,
+			"password" : password,
+			"cat" : cat
+		}, function(data) {
+			if (data.status == true)
+				window.location.href = "index";
+		});
+	}
+</script>
+</html>

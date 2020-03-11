@@ -1,0 +1,134 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<link rel="stylesheet" href="/static/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/static/css/bootstrap-datetimepicker.min.css" />
+<link rel="stylesheet" href="/static/css/font-awesome.min.css" />
+<link rel="stylesheet" href="/static/css/skins/_all-skins.css" />
+</head>
+<body>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-2"></div>
+			<div class="col-md-8">
+				<div class="panel panel-default" style="padding: 10px">
+					<div class="panel-heading">新增用户</div>
+					<div class="panel-body" >
+						
+						<form class="form-horizontal"	action="/student/add" method="post" enctype="multipart/form-data">
+							<div class="g" >
+								<label class="col-sm-1 control-label">学号</label>
+   								<div class="col-sm-5">
+      								<input type="text" class="form-control" id="uid" name="uid" placeholder="输入学号" required="required">
+      							</div>
+      							<label class="col-sm-1 control-label">姓名</label>
+   								<div class="col-sm-5">
+      								<input type="text" class="form-control" id="name" name="name" placeholder="输入姓名" required="required">
+      							</div>
+							</div>
+							
+							<div class="g">
+								<label class="col-sm-1 control-label">性别</label>
+								<div class="col-sm-5" >
+									<label class="radio-inline">
+									  <input type="radio" name="sex" id="" value="男" required="required"> 男
+									</label>
+									<label class="radio-inline">
+									  <input type="radio" name="sex" id="" value="女" required="required"> 女
+									</label>
+								</div>
+      							<label class="col-sm-1 control-label">电话</label>
+   								<div class="col-sm-5">
+      								<input type="text" class="form-control" id="phone" name="phone" placeholder="输入电话" required="required">
+      							</div>
+							</div>
+							<div class="g" >
+								<label class="col-sm-1 control-label">学院</label>
+   								<div class="col-sm-4">
+      								<input type="text" class="form-control" id="collageid" name="collageid" placeholder="输入学院" required="required">
+      							</div>
+      							<label class="col-sm-2 control-label">身份证</label>
+   								<div class="col-sm-5">
+      								<input type="text" class="form-control" id="idCardNum" name="idCardNum" placeholder="输入身份证" required="required">
+      							</div>
+							</div>
+							
+							<div class="g" >
+								<label class="col-sm-1 control-label">身份</label>
+   								<div class="col-sm-4">
+      								<select class="form-control" id="type" name="type">
+									  <option value="student">学生</option>
+									  <option value="teacher">老师</option>
+									</select>
+      							</div>
+      							<label class="col-sm-2 control-label">人脸相片</label>
+   								<div class="col-sm-5">
+      								<input  class="btn" id="upImage" name="image" type="file" required="required"/>
+      							</div>
+							</div>
+							
+							<div class="g" id="student" style="display:block">
+								<div class="g" >
+									<label class="col-sm-1 control-label">专业</label>
+	   								<div class="col-sm-4">
+	      								<input type="text" class="form-control" id="majorid" name="majorid" placeholder="输入专业" required="required">
+	      							</div>
+	      							<label class="col-sm-2 control-label">班号</label>
+	   								<div class="col-sm-5">
+	      								<input type="text" class="form-control" id="classid" name="classid" placeholder="输入班级号" required="required">
+	      							</div>
+								</div>
+								<div class="g" >
+									<label class="col-sm-1 control-label">生源地</label>
+	   								<div class="col-sm-4">
+	      								<input type="text" class="form-control" id="homePlace" name="homePlace" placeholder="输入生源地" required="required">
+	      							</div>
+	      							<label class="col-sm-2 control-label">注册年级</label>
+	   								<div class="col-sm-5">
+	      								<input type="text" class="form-control" id="grade" name="grade" placeholder="输入年级，如“15级”" required="required">
+	      							</div>
+								</div>
+							</div>
+							<input type="submit" value="提交" class="pull-right btn btn-primary" style="margin:1rem 1.5rem 0 0;"/>
+						</form>						
+						
+					</div>
+					<div class="panel-footer">
+						
+				<div style="clear: both"></div>
+			</div>
+				</div>
+			</div>
+			<div class="col-md-2"></div>
+		</div>
+	</div>
+	<!-- 模态框（Modal） -->
+</body>
+
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<!-- <script src="/static/js/bootstrap-datetimepicker.min.js"></script>
+<script src="/static/js/bootstrap-datetimepicker.zh-CN.js"></script> -->
+<script type="text/javascript" th:inline="javascript">
+
+	$("#type").change(function(){
+		var a = $("#type").val();
+		if(a=="学生"){
+			$("#student").addClass("show");
+			$("#student").removeClass("hidden");
+			$("#majorid").attr("required","required");
+			$("#classid").attr("required","required");
+			$("#homePlace").attr("required","required");
+			$("#grade").attr("required","required");
+		}else{
+			$("#student").addClass("hidden");
+			$("#student").removeClass("show");
+			$("#majorid").removeAttr("required");
+			$("#classid").removeAttr("required");
+			$("#homePlace").removeAttr("required");
+			$("#grade").removeAttr("required");
+		}
+	})
+</script>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head lang="en">
+		<meta charset="UTF-8">
+		<title>学生宿舍管理系统</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<meta name="format-detection" content="telephone=no">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="alternate icon" type="image/png" href="/static/img/favicon.png">
+		<link rel="stylesheet" href="/static/css/amazeui.min.css" />
+		<style type="text/css">
+			#touxiang {
+				margin-right: 6px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="am-topbar am-topbar-fixed-top">
+			<div class="am-container">
+				<!--<img class="am-topbar-left" src="assets/i/favicon.png"/>-->
+				<p class="am-topbar-brand am-text-lg">
+					<img id="touxiang" class="" src="/static/img/boy.png" style="width: 32px;height: 32px;" />
+					<a href="#" id="queryTitle"><span th:text="${pageName}"></span></a>
+				</p>
+
+				<button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-secondary am-show-sm-only" data-am-collapse="{target: '#collapse-head'}">
+					<span class="am-sr-only">导航切换</span>
+					<span class="am-icon-bars"></span>
+				</button>
+				<div class="am-collapse am-topbar-collapse" id="collapse-head">
+					<ul class="am-nav am-nav-pills am-topbar-nav">
+						<li>
+							<a href="/">概览信息</a>
+						</li>
+						<li class="am-dropdown" data-am-dropdown>
+							<a class="am-dropdown-toggle" data-am-dropdown-toggle href="javascript:;">
+								请假管理<span class="am-icon-caret-down"></span>
+							</a>
+							<ul class="am-dropdown-content">
+								<li>
+									<a href="/leave">请假记录</a>
+								</li>
+								<li>
+									<a href="/mobile/leaveAdd">申请假条</a>
+								</li>
+							</ul>
+						</li>
+						<li class="am-dropdown" data-am-dropdown>
+							<a class="am-dropdown-toggle" data-am-dropdown-toggle href="javascript:;">
+								访客管理 <span class="am-icon-caret-down"></span>
+							</a>
+							<ul class="am-dropdown-content">
+								<!--<li class="am-dropdown-header">标题</li>-->
+								<li>
+									<a href="/visitor">访客列表</a>
+								</li>
+								<!-- <li>
+									<a href="/mobile/visitorInside">校内访客录入</a>
+								</li> -->
+								<li>
+									<a href="/mobile/visitorOutside">访客录入</a>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<a href="/mobile/query">记录查询</a>
+						</li>
+						<li>
+							<a href="/mobile/dormManage">住宿管理</a>
+						</li>
+						<li>
+							<a href="/mobile/myInfo">我的资料</a>
+						</li>
+						<li>
+							<a href="/mobile/changePwd">修改密码</a>
+						</li>
+						<li>
+							<a href="/mobile/about">关于</a>
+						</li>
+					</ul>
+					<div class="am-topbar-right">
+						<button class="am-btn am-btn-secondary am-topbar-btn am-btn-sm"><span class="am-icon-arrow-circle-right"></span> 退出登录</button>
+					</div>
+				</div>
+			</div>
+		</header>
+		<div class="content">
+			<!--<p class="am-text-center am-text-lg" style="margin-bottom: 0; background: #EDEDED;">出入记录</p>-->
+			<table id="leaTab" class="am-table am-table-striped am-table-centered">
+				<thead id="tabHead">
+					<tr th:if="${cat}=='a'">
+						<th>时间</th>
+						<th>地点</th>
+						<th>方向</th>
+					</tr>
+					<tr th:if="${cat}=='e'">
+						<th>时间</th>
+						<th>地点</th>
+						<th>类型</th>
+					</tr>
+					<tr th:if="${cat}=='v'">
+						<th>姓名</th>
+						<th>来访时间</th>
+						<th>离开时间</th>
+					</tr>
+				</thead>
+				<tbody th:if="${cat}=='a'">
+					<tr th:each="acc:${results}">
+						<td th:text="${acc.createTime}"></td>
+						<td th:text="${acc.place}"></td>
+						<td th:switch="${acc.direction}">
+							<span th:case=0>出</span>
+							<span th:case=1>入</span>
+						</td>
+					</tr>
+				</tbody>
+				<tbody th:if="${cat}=='e'">
+					<tr th:each="exc:${results}">
+						<td th:text="${exc.createTime}"></td>
+						<td th:text="${exc.devid}"></td>
+						<td th:switch="${exc.category}">
+							<span th:case=0>晚归</span>
+							<span th:case=1>未归</span>
+							<span th:case=2>未出</span>
+							<span th:case=4>异常</span>
+						</td>
+					</tr>
+				</tbody>
+				<tbody th:if="${cat}=='v'">
+					<tr th:each="visit:${results}">
+						<td th:text="${visit.vname}"></td>
+						<td th:text="${visit.createTime}"></td>
+						<td th:text="${visit.endTime}"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<script type="text/javascript" src="/static/js/jquery.min.js"></script>
+		<script src="/static/js/amazeui.min.js"></script>
+		<script type="text/javascript">
+		
+		</script>
+	</body>
+
+</html>

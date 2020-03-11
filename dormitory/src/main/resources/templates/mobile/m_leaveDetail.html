@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head lang="en">
+		<meta charset="UTF-8">
+		<title>学生宿舍管理系统</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<meta name="format-detection" content="telephone=no">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="alternate icon" type="image/png" href="/static/img/favicon.png">
+		<link rel="stylesheet" href="/static/css/amazeui.min.css" />
+		<style type="text/css">
+			#container,
+			#yichang,
+			#visitor {
+				width: 100%;
+				height: 400px;
+				margin-top: 1rem;
+			}
+			#leave{
+				margin-bottom: 0;
+			}
+			
+			
+			@media only screen and (max-width: 500px) {
+				#container {
+					position: relative;
+					left: -4px;
+					height: 280px;
+				}
+				#yichang {
+					position: relative;
+					left: -2px;
+					height: 280px;
+				}
+				#visitor {
+					height: 260px;
+				}
+			}
+			
+			#touxiang {
+				margin-right: 6px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="am-topbar am-topbar-fixed-top">
+			<div class="am-container">
+				<!--<img class="am-topbar-left" src="assets/i/favicon.png"/>-->
+				<p class="am-topbar-brand am-text-lg"><img id="touxiang" class="" src="/static/img/girl-6.png" style="width: 32px;height: 32px;" />
+					<a href="#">请假审批</a>
+				</p><button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-secondary am-show-sm-only" data-am-collapse="{target: '#collapse-head'}"><span class="am-sr-only">导航切换</span><span class="am-icon-bars"></span></button>
+				<div class="am-collapse am-topbar-collapse" id="collapse-head">
+					<ul class="am-nav am-nav-pills am-topbar-nav">
+						<li>
+							<a href="m_index.html">概览信息</a>
+						</li>
+						<li>
+							<a href="m_leave.html">请假申请</a>
+						</li>
+						<li class="am-dropdown" data-am-dropdown>
+							<a class="am-dropdown-toggle" data-am-dropdown-toggle href="javascript:;">录入访客 <span class="am-icon-caret-down"></span></a>
+							<ul class="am-dropdown-content">
+								<!--<li class="am-dropdown-header">标题</li>-->
+								<li>
+									<a href="m_visitor_inside.html">校内访客录入</a>
+								</li>
+								<li>
+									<a href="m_visitor_outside.html">校外访客录入</a>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<a href="m_query.html">记录查询</a>
+						</li>
+						<li>
+							<a href="m_dormManage.html">住宿管理</a>
+						</li>
+						<li>
+							<a href="m_myInfo.html">我的资料</a>
+						</li>
+						<li>
+							<a href="m_changePwd.html">修改密码</a>
+						</li>
+						<li>
+							<a href="m_about.html">关于</a>
+						</li>
+					</ul>
+					<div class="am-topbar-right"><button class="am-btn am-btn-secondary am-topbar-btn am-btn-sm"><span class="am-icon-arrow-circle-right"></span>退出登录</button></div>
+				</div>
+			</div>
+		</header>
+		<div class="wrapper">
+			<table class="am-table">
+				<thead>
+					<tr>
+						<th>假条信息</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>姓名：</td>
+						<td th:text="${results[0].applyName}"></td>
+					</tr>
+					<tr>
+						<td>学号：</td>
+						<td th:text="${results[0].applyid}"></td>
+					</tr>
+					<tr>
+						<td>起始时间：</td>
+						<td th:text="${results[0].beginTime}"></td>
+					</tr>
+					<tr>
+						<td>结束时间：</td>
+						<td th:text="${results[0].endTime}"></td>
+					</tr>
+					<!-- <tr>
+						<td>请假类型：</td>
+						<td th:text="${results[0].applyid}">病假</td>
+					</tr> -->
+					<tr>
+						<td>请假原因：</td>
+						<td th:text="${results[0].reason}"></td>
+					</tr>
+					<tr>
+						<td>假条状态：</td>
+						<td th:if="${results[0].status}==0" th:text="待审批"></td>
+						<td th:if="${results[0].status}==1 and ${results[0].iscancel}==0" th:text="通过"></td>
+						<td th:if="${results[0].status}==2" th:text="不通过"></td>
+						<td th:if="${results[0].iscancel}==1" th:text="已销假"></td>
+					</tr>
+					<tr>
+						<td>审批操作：</td>
+						<td th:if="${results[0].status}==0" th:id="${results[0].leaid}">
+							<input type="button" class="am-btn am-btn-sm am-btn-primary am-radius" id="success" value="通过" style="width:46%"/>&nbsp;
+							<input type="button" class="am-btn am-btn-sm am-btn-danger am-radius" id="fail" value="否决" style="width:46%"/>
+						</td>
+						<td th:if="${results[0].status}!=0">
+							<input type="button" disabled="disabled" class="am-btn am-btn-sm am-btn-primary am-radius" value="通过" style="width:46%"/>&nbsp;
+							<input type="button" disabled="disabled" class="am-btn am-btn-sm am-btn-danger am-radius" value="否决" style="width:46%"/>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			
+			<!--<div class="am-panel am-panel-default" id="leave">
+				<table id="leaTab" class="am-table am-table-striped am-table-centered">
+					<thead>
+						<tr>
+							<th>姓名</th>
+							<th>宿舍</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody id="leaTabBody">
+						<tr>
+							<td>王旭平</td>
+							<td>19#511</td>
+							<td>
+								<input type="button" class="am-btn am-btn-sm am-btn-primary am-radius" id="" value="调宿" />
+								<input type="button" class="am-btn am-btn-sm am-btn-warning am-radius" id="" value="退宿" />
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>-->
+			
+		</div>
+		<script src="/static/js/jquery.min.js"></script>
+		<script src="/static/js/amazeui.min.js"></script>
+		<script type="text/javascript">
+		$('body').on('click', '#success', function() {
+			var leaid = $(this).parent().attr('id');
+			if(confirm("是否通过？")){
+				 $.post("/leave/check/success",{"leaid":leaid},function(result){
+					if (result.status) {
+						window.location.reload();
+					} else {
+						alert(result.msg);
+					}
+				});
+			}
+			
+		});
+		$('body').on('click', '#fail', function() {
+			var leaid = $(this).parent().attr('id');
+			if(confirm("是否否决？")){
+				$.post("/leave/check/fail",{"leaid":leaid},function(result){
+					if (result.status) {
+						window.location.reload();
+					} else {
+						alert(result.msg);
+					}
+				});
+			}
+			
+		});
+		</script>
+	</body>
+
+</html>
