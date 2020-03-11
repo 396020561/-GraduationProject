@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head lang="en">
+		<meta charset="UTF-8">
+		<title>学生宿舍管理系统</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<meta name="format-detection" content="telephone=no">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="alternate icon" type="image/png" href="/static/img/favicon.png">
+		<link rel="stylesheet" href="/static/css/amazeui.min.css" />
+		<style type="text/css">
+			#touxiang {
+				margin-right: 6px;
+			}
+			.panelItem{
+				margin-bottom: 1rem;
+			}
+			.panelHeader{
+				padding-right: 0.9rem;
+			}
+			.panelBody{
+				padding-bottom: 0;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="am-topbar am-topbar-fixed-top">
+			<div class="am-container">
+				<p class="am-topbar-brand am-text-lg">
+					<img id="touxiang" class="" src="/static/img/boy.png" style="width: 32px;height: 32px;" />
+					<a href="#">访客列表</a>
+				</p>
+				<button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-secondary am-show-sm-only" data-am-collapse="{target: '#collapse-head'}">
+					<span class="am-sr-only">导航切换</span>
+					<span class="am-icon-bars"></span>
+				</button>
+				<div class="am-collapse am-topbar-collapse" id="collapse-head">
+					<ul class="am-nav am-nav-pills am-topbar-nav">
+						<li>
+							<a href="/">概览信息</a>
+						</li>
+						<li class="am-dropdown" data-am-dropdown>
+							<a class="am-dropdown-toggle" data-am-dropdown-toggle href="javascript:;">
+								请假管理<span class="am-icon-caret-down"></span>
+							</a>
+							<ul class="am-dropdown-content">
+								<li>
+									<a href="/leave">请假记录</a>
+								</li>
+								<li>
+									<a href="/mobile/leaveAdd">申请假条</a>
+								</li>
+							</ul>
+						</li>
+						<li class="am-dropdown" data-am-dropdown>
+							<a class="am-dropdown-toggle" data-am-dropdown-toggle href="javascript:;">
+								访客管理 <span class="am-icon-caret-down"></span>
+							</a>
+							<ul class="am-dropdown-content">
+								<!--<li class="am-dropdown-header">标题</li>-->
+								<li>
+									<a href="/visitor">访客列表</a>
+								</li>
+								<!-- <li>
+									<a href="/mobile/visitorInside">校内访客录入</a>
+								</li> -->
+								<li>
+									<a href="/mobile/visitorOutside">访客录入</a>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<a href="/mobile/query">记录查询</a>
+						</li>
+						<li>
+							<a href="/mobile/dormManage">住宿管理</a>
+						</li>
+						<li>
+							<a href="/mobile/myInfo">我的资料</a>
+						</li>
+						<li>
+							<a href="/mobile/changePwd">修改密码</a>
+						</li>
+						<li>
+							<a href="/mobile/about">关于</a>
+						</li>
+					</ul>
+					<div class="am-topbar-right">
+						<button class="am-btn am-btn-secondary am-topbar-btn am-btn-sm"><span class="am-icon-arrow-circle-right"></span> 退出登录</button>
+					</div>
+				</div>
+			</div>
+		</header>
+		<div class="am-container" style="margin-top: 1rem;">
+			<div class="panelItem am-panel am-panel-default" th:each="visitor:${results}">
+				<header class="panelHeader am-panel-hd" th:id="${visitor.visitorid}">
+					<p class="am-panel-title am-inline" th:text="${visitor.name}"></p>
+					<button th:id="${visitor.visitorid}" class="edit am-inline am-align-right am-btn am-btn-primary am-btn-xs am-radius">重新录入</button>
+				</header>
+				<div class="panelBody am-panel-bd">
+					<p>开始时间：<span class="begin" th:text="${visitor.beginTime}"></span></p>
+					<p>结束时间：<span class="end" th:text="${visitor.endTime}"></span><span class="am-align-right">已失效</span></p>
+				</div>
+			</div>
+			
+		</div>
+		
+		<div class="bg-model" style="position:absolute;top:0%;left:0%;display:none;background:rgba(0,0,0,0.3);width:100%;height:100%;position:fixed;z-index:9999">
+				<div class='content am-panel am-panel-default' style="position: absolute;left: 3%;top: 30%;border-radius: 8px;width: 94%;height: 37%;background-color: #fff;">
+					<header class="panelHeader am-panel-hd" style="border-radius: 8px 8px 0 0;">
+						<p id="m-vname" class="am-panel-title am-inline"></p>
+					</header>
+					<div class="panelBody am-panel-bd">
+						<form id="timeForm" class="am-form" method="post" onsubmit="return checkForm()">
+							<div class="begin-time am-g">
+								<div class="am-text-left am-u-sm-4 am-u-md-2" style="padding: 0;">
+									开始时间:
+								</div>
+								<div class="am-form-group am-form-icon am-u-sm-8 am-u-md-10 " style="padding: 0;">
+									<i class="am-icon-calendar"></i>
+									<input type="datetime-local" id="beginInput" class="am-form-field am-input-sm am-radius" placeholder="时间">
+									<input type="hidden" id="beginTime" name="beginTime"/>
+								</div>
+							</div>
+							<div class="end-time am-g">
+								<div class="am-text-left am-u-sm-4 am-u-md-2" style="padding: 0;">
+									结束时间:
+								</div>
+								<div class="am-form-group am-form-icon am-u-sm-8 am-u-md-10 " style="padding: 0;">
+									<i class="am-icon-calendar"></i>
+									<input type="datetime-local" id="endInput" class="am-form-field am-input-sm am-radius" placeholder="时间">
+									<input type="hidden" id="endTime" name="endTime"/>
+								</div>
+							</div>
+							
+						</form>
+						<div class="am-align-right" style="width: 100%;">
+							<button id="alertTime" class="am-btn am-btn-secondary am-btn-md am-radius" style="width: 48%;margin-right:2%;">确定</button>
+							<button id="cancel" class="am-btn am-btn-danger am-btn-md am-radius" style="width: 48%;">取消</button>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		
+		<script type="text/javascript" src="/static/js/jquery.min.js"></script>
+		<script src="/static/js/amazeui.min.js"></script>
+		<script type="text/javascript">
+		/* function bodyScroll(event){  
+		    event.preventDefault();  
+		}  */
+		
+		function checkForm(){
+			var begin='';
+			var end='';
+			var beginTime=$("#beginInput").val().replace('T',' ');
+			var endTime=$("#endInput").val().replace('T',' ');
+			$("#beginTime").val(beginTime);
+			$("#endTime").val(endTime);
+			begin = $("#beginTime").val();
+			end = $("#endTime").val();
+			
+			if(begin!='' && end!=''){
+				return true;
+			}else{
+				alert("访问时间上传失败");
+				return false
+			}	
+		}
+		
+		$(".edit").click(function() {
+			var name = $(this).prev().text();
+			var begin = $(this).parents(".panelItem").find(".begin").text().replace(" ","T");
+			var end = $(this).parents(".panelItem").find(".end").text().replace(" ","T");
+			var id = $(this).attr('id');
+			
+			$("#m-vname").text(name);
+			$("#beginInput").val(begin);
+			$("#endInput").val(end);　　
+			$(".bg-model").fadeTo(300, 1);　　
+			$("body").css({
+				"overflow": "hidden",
+				"position": "fixed",
+				"width": "100%"
+			});
+			
+			$("#timeForm").attr("action","/visitor/edit/"+id); 
+			
+			/* $("body").addEventListener('touchmove', bodyScroll, false); //这行代码必须放在最底部 */
+		});
+		
+		$("#alertTime").click(function() {
+			$(".bg-model").hide();　
+			$("body").css({"overflow": "visible","position":"initial","height":"auto"});　　
+			$("#timeForm").submit();
+			
+			/* $("body").removeEventListener('touchmove',bodyScroll,false); //这行代码必须放在最底部 */
+		});
+		
+		$("#cancel").click(function() {　　
+			$(".bg-model").hide();　
+			$("body").css({"overflow": "visible","position":"initial","height":"auto"});
+			/* $("body").removeEventListener('touchmove',bodyScroll,false); //这行代码必须放在最底部  */
+		});
+		
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+<meta charset="UTF-8">
+<title>学生宿舍管理系统</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no">
+<meta name="renderer" content="webkit">
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<link rel="alternate icon" type="image/png"
+	href="/static/img/favicon.png">
+<link rel="stylesheet" href="/static/css/amazeui.min.css" />
+<style type="text/css">
+#touxiang {
+	margin-right: 6px;
+}
+</style>
+</head>
+
+<body>
+<div class="am-container" style="margin-top: 20px;">
+	<form id="queryForm" class="am-form" action="/student/queryAccAttend"
+		onsubmit="return checkForm()" method="post">
+		<div class="am-g">
+			<p class="am-text-left am-u-sm-3 am-u-md-2" style="padding: 0;">查询类别:</p>
+			<div class="am-form-group am-u-sm-9 am-u-md-10 " style="padding: 0;">
+				<select id="relation" name="category" class="am-radius am-input-sm">
+					<option value=0 selected>晚归记录</option>
+					<option value=1>未归记录</option>
+					<option value=2>未出记录</option>
+					<option value=4>异常记录</option>
+					<option value=5>访客记录</option>
+					<option value=6>通行记录</option>
+				</select>
+			</div>
+		</div>
+		<div class="end-time am-g">
+			<div class="am-text-left am-u-sm-3 am-u-md-2" style="padding: 0;">
+				开始日期:</div>
+			<div class="am-form-group am-form-icon am-u-sm-9 am-u-md-10 "
+				style="padding: 0;">
+				<i class="am-icon-calendar"></i> <input type="datetime-local"
+					id="beginInput" class="am-form-field am-input-sm am-radius"
+					placeholder="时间"> <input type="hidden" id="beginTime"
+					name="beginTime">
+			</div>
+		</div>
+		<div class="end-time am-g">
+			<div class="am-text-left am-u-sm-3 am-u-md-2" style="padding: 0;">
+				结束日期:</div>
+			<div class="am-form-group am-form-icon am-u-sm-9 am-u-md-10 "
+				style="padding: 0;">
+				<i class="am-icon-calendar"></i> <input type="datetime-local"
+					id="endInput" class="am-form-field am-input-sm am-radius"
+					placeholder="时间"> <input type="hidden" id="endTime"
+					name="endTime">
+			</div>
+		</div>
+
+		<div class="am-align-right">
+			<button id="subBtn" type="submit"
+				class="am-btn am-btn-secondary am-btn-sm am-radius">
+				<span class="am-icon-search"></span>查询
+			</button>
+		</div>
+	</form>
+	</div>
+	<!-- <div class="am-align-right">
+				<button id="subBtn" class="am-btn am-btn-secondary am-btn-sm am-radius"><span class="am-icon-search"></span>&nbsp;查询</button>
+			</div> -->
+	
+	<script type="text/javascript" src="/static/js/jquery.min.js"></script>
+	<script src="/static/js/amazeui.min.js"></script>
+	<script type="text/javascript">
+		function CurentTime() {
+			var now = new Date();
+			var year = now.getFullYear(); //年
+			var month = now.getMonth() + 1; //月
+			var day = now.getDate(); //日
+			var hh = now.getHours(); //时
+			var mm = now.getMinutes(); //分
+			var clock = year + "-";
+
+			month < 10 ? clock += "0" + month + "-" : clock += month + "-";
+			day < 10 ? clock += "0" + day + "-" : clock += day + "-";
+			hh < 10 ? clock += "0" + hh + "-" : clock += hh + "-";
+			mm < 10 ? clock += "0" + mm + "-" : clock += mm + "-";
+
+			return (clock);
+		}
+
+		function checkForm() {
+			var begin = '';
+			var end = '';
+			var beginTime = $("#beginInput").val().replace('T', ' ');
+			var endTime = $("#endInput").val().replace('T', ' ');
+			$("#beginTime").val(beginTime);
+			$("#endTime").val(endTime);
+			begin = $("#beginTime").val();
+			end = $("#endTime").val();
+
+			if (begin != '' && end != '') {
+				return true;
+			} else if (begin == '' && end != '') {
+				$("#beginTime").val('1970-01-01 00:00:00');
+				return true;
+			} else if (begin != '' && end == '') {
+				$("#endTime").val(CurentTime());
+				return true;
+			} else if (begin == '' && end == '') {
+				$("#beginTime").val('1970-01-01 00:00:00');
+				$("#endTime").val(CurentTime());
+				return true;
+			}
+
+		}
+	</script>
+</body>
+
+</html>

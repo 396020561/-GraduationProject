@@ -1,0 +1,272 @@
+0711111111111/*<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<link rel="stylesheet" href="/static/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/static/css/bootstrap-datetimepicker.min.css" />
+<link rel="stylesheet" href="/static/css/font-awesome.min.css" />
+<link rel="stylesheet" href="/static/css/skins/_all-skins.css" />
+</head>
+<body>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-2"></div>
+			<div class="col-md-8">
+				<div class="panel panel-default" style="padding: 10px">
+					<div class="panel-heading">用户列表 <button class="btn btn-warning pull-right btn-xs" id="add">新增访客</button></div>
+					<div class="panel-body">
+						<table class="table table-hover">
+							<thead>
+								<tr class="info">
+									<th>学生姓名</th>
+									<th>性别</th>
+									<th>手机号码</th>
+									<th>注册时间</th>
+									<th>年级</th>
+									<th>身份证号</th>
+									<th>生源地</th>
+									<th>操作</th>
+								</tr>
+							</thead>
+							<tbody style="height: 100%" id="tbody">
+								<tr th:each="visitor:${results}" class="warning">
+									<td th:text="${visitor.name}" ></td>
+									<td th:text="${visitor.sex}" ></td>
+									<td th:text="${visitor.phone}" ></td>
+									<td th:text="${visitor.registerTime}" ></td>
+									<td th:text="${visitor.grade}" ></td>
+									<td th:text="${visitor.idCardNum}" ></td>
+									<td th:text="${visitor.homePlace}" ></td>
+									<td th:id="${visitor.visitorid}"><button  class="btn btn-warning"  id="edit">修改访客数据</button></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="panel-footer">
+						<a id="pre1" style=" font-size: 14px; float: left;text-decoration:none;color:#5B5B5B"  th:if="${page}==1">&lt;上一页</a> 
+						<a id="pre1" style="cursor: pointer; font-size: 14px; float: left" onclick="pre1()" th:if="${page}!=1">&lt;上一页</a> 
+						<span style="font-size: 14px; position: relative; left: 35%" th:text="'('+${page}+'/'+${pageTotal}+')'"></span>
+						<span style="font-size: 14px; position: relative; left: 35%">&nbsp;<a style="cursor: pointer; font-size: 14px" id="jump1" onclick="jump1()">跳转</a> 至 <input type="text" size="1" id="num1" />页</span>
+						<a id="next1" style="font-size: 14px; float: right;text-decoration:none;color:#5B5B5B" th:if="${pageTotal}==${page}">下一页 &gt;</a>
+						<a id="next1" style="cursor: pointer; font-size: 14px; float: right" onclick="next1()" th:if="${pageTotal}>${page}">下一页 &gt;</a>
+				<div style="clear: both"></div>
+			</div>
+				</div>
+			</div>
+			<div class="col-md-2"></div>
+		</div>
+	</div>
+	<!-- 模态框（Modal） -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<!-- 表单部分 -->
+				<form action="visitor/add" method="post" id="myForm" class="container" enctype="multipart/form-data" >
+					<div class="modal-header" style="border-bottom-width:0px">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-hidden="true">&times;</button>
+						<h4 class="modal-title" id="myModalLabel">用户数据录入</h4>
+					</div>
+					<div class="modal-body">
+						<div class="form-group container" >
+							<label for="lastname" class="col-sm-1 control-label text-center" style="position:relative;top:8px">用户姓名</label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control" name="name" autocomplete="off"
+									placeholder="请输入姓名" id="name" style="" required="required"/>
+							</div>
+						</div>
+						<div class="form-group container">
+							<label for="lastname" class="col-sm-1 control-label text-center" style="position:relative;top:6px">性  别</label>
+							<div class="col-sm-4">
+								<select name="sex" class="form-control" id="sex" required="required">
+									<option value="男">男</option>
+									<option value="女">女</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group container" >
+							<label for="lastname" class="col-sm-1 control-label text-center">用户手机号码</label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control" name="phone" autocomplete="off"
+									placeholder="请输入电话号码" id="phone" required="required"/>
+							</div>
+						</div>
+						<div class="form-group container" >
+							<label for="lastname" class="col-sm-1 control-label text-center">与访客之间的关系</label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control" name="phone" autocomplete="off"
+									placeholder="请输入关系" id="relationship" required="required"/>
+							</div>
+						</div>
+						<div class="form-group container">
+							<label for="lastname" class="col-sm-1 control-label" style="position:relative;top:4px">起始日期</label>
+							<div class="col-sm-4">
+								<input type="datetime" class="form-control" name="beginTime" autocomplete="off" readonly
+									placeholder="请输入起始日期" id="beginTime" required="required"/>
+							</div>
+						</div>
+						<div class="form-group container">
+							<label for="lastname" class="col-sm-1 control-label" style="position:relative;top:4px">结束日期</label>
+							<div class="col-sm-4">
+								<input type="datetime" class="form-control" name="endTime" autocomplete="off" readonly
+									placeholder="请输入结束日期" id="endTime" required="required"/>
+							</div>
+						</div>
+						<div class="form-group container" >
+							<label for="lastname" class="col-sm-1 control-label" style="position:relative;top:6px">访客来源</label>
+							<div class="col-sm-4">
+								<select name="type" class="form-control" id="type" required="required">
+									<option value="校外">校外</option>
+									<option value="校内">校内</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group container" >
+							<label for="lastname" class="col-sm-1 control-label" style="position:relative;top:8px">选择人脸图片</label>
+							<div class="col-sm-4">
+								<input  class="btn" id="upImage" name="image" type="file" required="required"/>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer" style="border-top-width:0px" >
+						<div class="col-sm-offset-2">
+							<button type="button" class="btn btn-default pull-left"
+								data-dismiss="modal">关闭</button>
+							<button type="submit" class="btn btn-primary pull-left" style="margin-left:20px">提交</button>
+						</div>
+					</div>
+				</form>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+	</div>
+</body>
+
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/bootstrap-datetimepicker.min.js"></script>
+<script src="/static/js/bootstrap-datetimepicker.zh-CN.js"></script>
+<script type="text/javascript" th:inline="javascript">
+/* 	$("#addLeave").on('click', function() {
+		var beginTime = $("#beginTime").val();
+		var endTime = $("#endTime").val();
+		var reason = $("#editor").val();
+		$.ajax({
+			url : "addLeave",
+			data : {
+				"beginTime" : beginTime,
+				"endTime" : endTime,
+				"reason" : reason
+			},
+			type : 'post',
+			success : function(data) {
+				alert(data.msg);
+			}
+		});
+	}); */
+	function pre1(){
+		var pageNum=[[${page}]]-1;
+		$("#pre1").attr("href","leave?page="+pageNum);	
+	};
+	function next1(){
+			var pageNum=[[${page}]]+1;
+			$("#next1").attr("href","leave?page="+pageNum);	
+	};
+	var numPattern = /^[0-9]*$/; 
+	function jump1(){
+		var c=$("#num1").val();
+		if(c!=""){
+			if(numPattern.test(c)){
+				if(c<= [[${pageTotal}]] &&c>0){
+					var pageNum=c;
+					$("#jump1").attr("href","leave?page="+pageNum);	
+				}else{
+					alert("输入页码大于总页数&&c>0，请重新输入");
+					$("#num1").val("");
+				}
+			}else{
+				alert("输入格式不正确，请重新输入");
+				$("#num1").val("");
+			}
+		}else{
+			alert("输入为空，不可跳转！请输入有效数字");
+		}
+	};
+/* 	var body1=document.getElementById("tbody");;
+	body1.onclick = function(ev){
+		var ev = ev || window.event;
+	　　var target = ev.target || ev.srcElement;
+	　　if(target.nodeName.toLowerCase() == 'button'){
+	　　　　　　var tname = target.parentNode.nodeValue;
+				console.log(tname)
+				var tsex = $("#sex1").text();
+				var tphone = $("#phone1").text(); 
+				var tbegain = $("#begain1").text();
+				var tend = $("#end1").text();
+				var ttype = $("#type1").text();
+				$('#myModal').modal("show");
+				$('#myModalLabel').text("访客数据修改");
+				$('#name').val(tname);
+				$('#name').attr("disabled","disabled");
+				$('#sex').val(tsex);
+				$('#sex').attr("disabled","disabled");
+				$('#phone').val(tphone);
+				$('#phone').attr("disabled","disabled");
+				$('#beginTime').val(tbegain);
+				$('#endTime').val(tend);
+				$('#type').val(ttype);
+				$('#type').attr("disabled","disabled");
+				$('#upImage').attr("disabled","disabled");
+	　　　　}
+		
+	} */
+	$(function(){
+		$('body').on('click', '#edit', function() {
+			var tr = $(this).parents('tr');
+			$('#myModal').modal("show");
+			$('#myModalLabel').text("访客数据修改");
+			$('#name').val(tr.children('td:eq(0)').text());
+			$('#name').attr('disabled','disabled'); 
+			$('#sex').val(tr.children('td:eq(1)').text());
+			$('#sex').attr('disabled','disabled'); 
+			$('#phone').val(tr.children('td:eq(2)').text());
+			$('#phone').attr('disabled','disabled'); 
+			$('#relationship').val(tr.children('td:eq(3)').text());
+			$('#relationship').attr('disabled','disabled'); 
+			$('#beginTime').val(tr.children('td:eq(4)').text());
+			$('#endTime').val(tr.children('td:eq(5)').text());
+			$('#type').val(tr.children('td:eq(6)').text());
+			$('#type').attr('disabled','disabled'); 
+			$('#upImage').attr('disabled','disabled');
+			var id = $(this).parent().attr('id');
+			document.getElementById('myForm').action = "/visitor/edit/"+id;
+		})
+		$('body').on('click', '#add', function() {
+			$('#myModalLabel').text("访客数据录入");
+			$('#myForm')[0].reset();
+			$('#myModal').modal("show");
+			var tr = $(this).parents('tr');
+			$('#name').removeAttr('disabled'); 
+			$('#sex').removeAttr('disabled'); 
+			$('#phone').removeAttr('disabled'); 
+			$('#relationship').removeAttr('disabled'); 
+			$('#type').removeAttr('disabled'); 
+			$('#upImage').removeAttr('disabled'); 
+			document.getElementById('myForm').action = "/visitor/add";
+		});
+	});
+	 $('#beginTime').datetimepicker({
+	        format: 'yyyy-mm-dd hh:mm',
+	        autoclose: true,
+	        language: 'zh-CN',
+	        minuteStep: 1
+	    });
+	    $('#endTime').datetimepicker({
+	        format: 'yyyy-mm-dd hh:mm',
+	        autoclose: true,
+	        language: 'zh-CN',
+	        minuteStep: 1
+	    });
+</script>
+</html>

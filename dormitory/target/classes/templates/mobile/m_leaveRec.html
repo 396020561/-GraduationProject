@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head lang="en">
+		<meta charset="UTF-8">
+		<title>学生宿舍管理系统</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<meta name="format-detection" content="telephone=no">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="alternate icon" type="image/png" href="/static/img/favicon.png">
+		<link rel="stylesheet" href="/static/css/amazeui.min.css" />
+		<style type="text/css">
+			#container,
+			#yichang,
+			#visitor {
+				width: 100%;
+				height: 400px;
+			}
+			
+			#qingjia {
+				width: 100%;
+			}
+			
+			@media only screen and (max-width: 500px) {
+				#container {
+					height: 280px;
+				}
+				#yichang {
+					height: 260px;
+				}
+				#visitor {
+					height: 220px;
+				}
+			}
+			
+			#touxiang {
+				margin-right: 6px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="am-topbar am-topbar-fixed-top">
+			<div class="am-container">
+				<!--<img class="am-topbar-left" src="assets/i/favicon.png"/>-->
+				<p class="am-topbar-brand am-text-lg">
+					<img id="touxiang" class="" src="/static/img/boy.png" style="width: 32px;height: 32px;"/>
+					<a href="#">请假记录</a>
+				</p>
+
+				<button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-secondary am-show-sm-only" data-am-collapse="{target: '#collapse-head'}">
+					<span class="am-sr-only">导航切换</span>
+					<span class="am-icon-bars"></span>
+				</button>
+				<div class="am-collapse am-topbar-collapse" id="collapse-head">
+					<ul class="am-nav am-nav-pills am-topbar-nav">
+						<li>
+							<a href="/">概览信息</a>
+						</li>
+						<li class="am-dropdown" data-am-dropdown>
+							<a class="am-dropdown-toggle" data-am-dropdown-toggle href="javascript:;">
+								请假管理<span class="am-icon-caret-down"></span>
+							</a>
+							<ul class="am-dropdown-content">
+								<li>
+									<a href="/leave">请假记录</a>
+								</li>
+								<li>
+									<a href="/mobile/leaveAdd">申请假条</a>
+								</li>
+							</ul>
+						</li>
+						<li class="am-dropdown" data-am-dropdown>
+							<a class="am-dropdown-toggle" data-am-dropdown-toggle href="javascript:;">
+								访客管理 <span class="am-icon-caret-down"></span>
+							</a>
+							<ul class="am-dropdown-content">
+								<!--<li class="am-dropdown-header">标题</li>-->
+								<li>
+									<a href="/visitor">访客列表</a>
+								</li>
+								<!-- <li>
+									<a href="/mobile/visitorInside">校内访客录入</a>
+								</li> -->
+								<li>
+									<a href="/mobile/visitorOutside">访客录入</a>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<a href="/mobile/query">记录查询</a>
+						</li>
+						<li>
+							<a href="/mobile/dormManage">住宿管理</a>
+						</li>
+						<li>
+							<a href="/mobile/myInfo">我的资料</a>
+						</li>
+						<li>
+							<a href="/mobile/changePwd">修改密码</a>
+						</li>
+						<li>
+							<a href="/mobile/about">关于</a>
+						</li>
+					</ul>
+					<div class="am-topbar-right">
+						<button class="am-btn am-btn-secondary am-topbar-btn am-btn-sm"><span class="am-icon-arrow-circle-right"></span> 退出登录</button>
+					</div>
+				</div>
+			</div>
+		</header>
+		<div class="wrapper">
+			<div id="qingjia">
+				<table id="leaTab" class="am-table am-table-striped am-table-centered">
+					<thead>
+						<tr>
+							<th>申请时间</th>
+							<th>请假状态</th>
+							<th th:if="${results[0].operate}==true and ${results[0].iscancel}==0" >操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="leaveResult:${results}" class="warning">
+							<td th:text="${leaveResult.createTime}"></td>
+							<td th:if="${leaveResult.status}==0" th:text="待审批"></td>
+							<td th:if="${leaveResult.status}==1 and ${leaveResult.iscancel}==0" th:text="通过"></td>
+							<td th:if="${leaveResult.status}==2" th:text="不通过"></td>
+							<td th:if="${leaveResult.iscancel}==1 and ${leaveResult.status}==1" th:text="已销假"></td>
+							<td th:if="${leaveResult.operate}==true and ${leaveResult.iscancel}==0">
+							    <a th:onclick="|cancel(${leaveResult.leaid})|" th:text="销假" href="#" style="cursor: pointer"></a>
+							</td>
+							<td th:if="${leaveResult.operate}==true and ${leaveResult.iscancel}==1" th:text="null"></td>
+							<td th:if="${leaveResult.operate}==false" th:text="null"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<script type="text/javascript" src="/static/js/jquery.min.js"></script>
+		<script src="/static/js/amazeui.min.js"></script>
+		<script type="text/javascript">
+		function cancel(e) {
+			var c = confirm("是否提前销假？");
+			if(c){
+				$.post("/leave/cancel", {
+					"leaid" : e
+				}, function(result) {
+					if (result.status) {
+						window.location.reload();
+					} else {
+						alert(result.msg);
+					}
+				});
+			}
+			
+		}
+		</script>
+
+	</body>
+
+</html>

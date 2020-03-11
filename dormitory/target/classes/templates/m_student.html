@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+
+	<head lang="en">
+		<meta charset="UTF-8">
+		<title>学生宿舍管理系统</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<meta name="format-detection" content="telephone=no">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="alternate icon" type="image/png" href="assets/i/favicon.png">
+		<link rel="stylesheet" href="/static/css/amazeui.min.css" />
+		<style type="text/css">
+			#container,
+			#yichang,
+			#visitor {
+				width: 100%;
+				height: 400px;
+			}
+			
+			#qingjia {
+				width: 100%;
+			}
+			
+			@media only screen and (max-width: 500px) {
+				#container {
+					height: 280px;
+				}
+				#yichang {
+					height: 260px;
+				}
+				#visitor {
+					height: 220px;
+				}
+			}
+			
+			#touxiang {
+				margin-right: 6px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="am-topbar am-topbar-fixed-top">
+			<div class="am-container">
+				<!--<img class="am-topbar-left" src="assets/i/favicon.png"/>-->
+				<p class="am-topbar-brand am-text-lg">
+					<img id="touxiang" class="" src="/static/img/boy.png" style="width: 32px;height: 32px;"/>
+					<a href="#">概览信息</a>
+				</p>
+
+				<button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-secondary am-show-sm-only" data-am-collapse="{target: '#collapse-head'}">
+					<span class="am-sr-only">导航切换</span>
+					<span class="am-icon-bars"></span>
+				</button>
+				<div class="am-collapse am-topbar-collapse" id="collapse-head">
+					<ul class="am-nav am-nav-pills am-topbar-nav">
+						<li>
+							<a href="m_index.html">概览信息</a>
+						</li>
+						<li>
+							<a href="m_leave.html">请假申请</a>
+						</li>
+						<li class="am-dropdown" data-am-dropdown>
+							<a class="am-dropdown-toggle" data-am-dropdown-toggle href="javascript:;">
+								录入访客 <span class="am-icon-caret-down"></span>
+							</a>
+							<ul class="am-dropdown-content">
+								<!--<li class="am-dropdown-header">标题</li>-->
+								<li>
+									<a href="m_visitor_inside.html">校内访客录入</a>
+								</li>
+								<li>
+									<a href="m_visitor_outside.html">校外访客录入</a>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<a href="m_query.html">记录查询</a>
+						</li>
+						<li>
+							<a href="m_myInfo.html">我的资料</a>
+						</li>
+						<li>
+							<a href="m_changePwd.html">修改密码</a>
+						</li>
+						<li>
+							<a href="m_about.html">关于</a>
+						</li>
+					</ul>
+					<div class="am-topbar-right">
+						<button class="am-btn am-btn-secondary am-topbar-btn am-btn-sm"><span class="am-icon-arrow-circle-right"></span> 退出登录</button>
+					</div>
+				</div>
+			</div>
+		</header>
+		<div class="wrapper" style="margin-top: 12px;">
+			<div id="container"></div>
+			<div id="yichang"></div>
+			<div id="visitor"></div>
+			<div id="qingjia">
+				<p class="am-text-center am-text-lg">最近请假记录</p>
+				<table id="leaTab" class="am-table am-table-striped am-table-centered">
+					<thead>
+						<tr>
+							<th>序号</th>
+							<th>请假时间</th>
+							<th>请假状态</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>19041812</td>
+							<td>2019-04-19</td>
+							<td>待审批</td>
+						</tr>
+						<tr>
+							<td>19031212</td>
+							<td>2019-03-14</td>
+							<td>已结束</td>
+						</tr>
+						<tr>
+							<td>18120533</td>
+							<td>2018-12-07</td>
+							<td>已结束</td>
+						</tr>
+						<tr>
+							<td>18102256</td>
+							<td>2018-10-25</td>
+							<td>已结束</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<script type="text/javascript" src="/static/js/jquery.min.js"></script>
+		<script src="/static/js/amazeui.min.js"></script>
+		<script src="/static/js/highcharts.js"></script>
+		<!--<script type="text/javascript" src="js/exporting.js"></script>-->
+		<script type="text/javascript" src="/static/js/highcharts-zh_CN.js"></script>
+		<script type="text/javascript" src="/static/js/m_index.js"></script>
+
+	</body>
+
+</html>

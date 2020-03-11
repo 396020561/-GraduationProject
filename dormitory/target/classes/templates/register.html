@@ -1,0 +1,61 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<link rel="stylesheet" href="/static/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/static/css/font-awesome.min.css" />
+<link rel="stylesheet" href="/static/css/skins/_all-skins.css" />
+</head>
+<body>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-2"></div>
+			<div class="col-md-8">
+				<div class="panel panel-default" style="padding: 10px">
+					<div class="panel-body">
+						<div class="form-group">
+							<label for="exampleInputName1">注册楼栋:</label> 
+							<select id="building">
+								<option value="1">1，2栋</option>
+								<option value="2">3，4栋</option>
+								<option value="3">5，6栋</option>
+								<option value="4">7，8栋</option>
+								<option value="5">9，10栋</option>
+								<option value="6">11，12栋</option>
+								<option value="7">13，14栋</option>
+								<option value="8">15，16栋</option>
+								<option value="9">17，18栋</option>
+								<option value="10">19，20栋</option>
+								<option value="11">21，22栋</option>
+								<option value="12">23，24栋</option>
+								<option value="13">25，26栋</option>
+								<option value="14">27，28栋</option>
+							</select>
+						</div>
+						<input type="button" value="注册" id="toRegister"
+							class="btn btn-primary col-md-1 col-md-offset-10" />
+					</div>
+				</div>
+			</div>
+			<div class="col-md-2"></div>
+		</div>
+	</div>
+</body>
+
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script>
+	$(function(){
+		$('body').on('click','#toRegister',function(){
+			var buildingid=$("#building").val();
+			$.post("register/building",{"buildingid":buildingid},function(result){
+				if(result.status)
+					alert(result.msg);
+				else
+					alert(result.msg);
+			});
+		});
+		
+	});
+</script>
+</html>
